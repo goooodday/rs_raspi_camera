@@ -1,0 +1,17 @@
+[package]
+name = "raspberry_pi_camera_stream"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.0", features = ["full"] }
+warp = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+base64 = "0.22"
+opencv = "0.93"
+futures = "0.3"
+log = "0.4"
+env_logger = "0.11"
+anyhow = "1.0"
+image = "0.25"
