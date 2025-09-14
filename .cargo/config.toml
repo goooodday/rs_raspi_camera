@@ -1,0 +1,10 @@
+[target.aarch64-unknown-linux-gnu]
+linker = "aarch64-unknown-linux-gnu-gcc"
+rustflags = [
+    "-C", "link-arg=--sysroot=/Users/hyeongabshin/Git_Room/Rust_src/rs_raspi_camera/sysroot",
+    "-C", "link-arg=-L/Users/hyeongabshin/Git_Room/Rust_src/rs_raspi_camera/sysroot/usr/lib/aarch64-linux-gnu",
+    "-C", "link-arg=-L/Users/hyeongabshin/Git_Room/Rust_src/rs_raspi_camera/sysroot/lib/aarch64-linux-gnu",
+    "-C", "link-arg=-Wl,-rpath-link,/Users/hyeongabshin/Git_Room/Rust_src/rs_raspi_camera/sysroot/usr/lib/aarch64-linux-gnu",
+    "-C", "link-arg=-Wl,-rpath-link,/Users/hyeongabshin/Git_Room/Rust_src/rs_raspi_camera/sysroot/lib/aarch64-linux-gnu",
+    "-C", "link-arg=-Wl,--disable-new-dtags"
+]
