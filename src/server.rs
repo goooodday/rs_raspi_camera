@@ -1,4 +1,4 @@
-use warp::{Filter, ws::{Message, WebSocket}, Reply};
+use warp::{Filter, ws::{Message, WebSocket}};
 use futures::{FutureExt, StreamExt, SinkExt};
 use std::sync::{Arc, Mutex};
 use std::collections::HashMap;

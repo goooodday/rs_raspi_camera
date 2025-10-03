@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y \
     libopencv-dev \
     libclang-dev \
     clang \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-ugly \
     curl \
     git \
     && rm -rf /var/lib/apt/lists/*

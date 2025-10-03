@@ -99,17 +99,19 @@ docker run --rm -v "$(pwd):/app" -w /app --platform linux/arm64 raspberry-pi-cam
 
 #### 4. 실행 파일 배포
 
-컴파일이 성공적으로 완료되면, target/release/ `raspberry_pi_camera_stream` 실행 파일을 찾을 수 있습니다.
+컴파일이 성공적으로 완료되면, `target/release/` 디렉토리에서 `raspberry_pi_camera_stream` 실행 파일을 찾을 수 있습니다. 웹 인터페이스에 필요한 `static` 폴더도 함께 배포해야 합니다.
 
 ```bash
-# scp를 이용해 컴파일된 바이너리를 라즈베리 파이로 전송
+# scp를 이용해 컴파일된 바이너리와 static 폴더를 라즈베리 파이로 전송
 scp target/release/raspberry_pi_camera_stream pi@<라즈베리파이_IP>:~
+scp -r static/ pi@<라즈베리파이_IP>:~
 
 # 라즈베리 파이에 SSH로 접속하여 실행 권한을 부여하고 실행
 ssh pi@<라즈베리파이_IP>
 chmod +x ./raspberry_pi_camera_stream
 ./raspberry_pi_camera_stream
 ```
+> **참고**: 실행 파일과 `static` 폴더는 반드시 같은 디렉토리 안에 있어야 합니다.
 
 ---
 

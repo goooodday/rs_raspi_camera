@@ -1,13 +1,13 @@
 use anyhow::{Result, anyhow};
 use opencv::{
     prelude::*,
-    videoio::{VideoCapture, CAP_PROP_FRAME_WIDTH, CAP_PROP_FRAME_HEIGHT, CAP_V4L2},
+    videoio::{VideoCapture, CAP_ANY, CAP_PROP_FRAME_WIDTH, CAP_PROP_FRAME_HEIGHT, CAP_PROP_FOURCC, VideoWriter},
     imgcodecs::{imencode, IMWRITE_JPEG_QUALITY},
     core::Vector,
 };
 use std::sync::{Arc, Mutex};
 use tokio::time::{interval, Duration};
-use log::{info, error, warn};
+use log::{info, error};
 
 pub struct Camera {
     cap: Arc<Mutex<VideoCapture>>,
@@ -18,7 +18,7 @@ impl Camera {
     pub fn new(device_id: i32, width: i32, height: i32, fps: u64) -> Result<Self> {
         info!("Initializing camera with device ID: {}", device_id);
         
-        let mut cap = VideoCapture::new(device_id, CAP_V4L2)?;
+        let mut cap = VideoCapture::new(device_id, CAP_ANY)?;
         
         if !cap.is_opened()? {
             return Err(anyhow!("Unable to open camera device {}", device_id));
@@ -27,6 +27,10 @@ impl Camera {
         // Set camera properties
         cap.set(CAP_PROP_FRAME_WIDTH, width as f64)?;
         cap.set(CAP_PROP_FRAME_HEIGHT, height as f64)?;
+
+        // Set camera format to MJPEG
+        let fourcc = VideoWriter::fourcc('M', 'J', 'P', 'G')?;
+        cap.set(CAP_PROP_FOURCC, fourcc as f64)?;
         
         info!("Camera initialized successfully - {}x{} @ {}fps", width, height, fps);
         
