@@ -78,32 +78,32 @@ cargo build --release
 
 - **(선택) Colima 사용자**: macOS에서 Colima를 사용하는 경우, `colima start` 명령어로 Docker 데몬을 시작해야 할 수 있습니다.
 
-#### 2. 빌드 이미지 생성
+#### 2. 최초 1회: Docker 빌드 이미지 생성
 
-프로젝트 루트 디렉토리에서 아래 명령어를 실행하여 `aarch64` 빌드 환경을 포함한 Docker 이미지를 생성합니다. 이 이미지는 향후 빌드 시 재사용됩니다.
+프로젝트 루트 디렉토리에서 아래 명령어를 실행하여 `aarch64` 빌드 환경을 포함한 Docker 이미지를 생성합니다. **이 과정은 최초 한 번만 실행하면 되며,** 향후 빌드부터는 재사용됩니다.
 
 ```bash
 # aarch64 아키텍처용 빌드 환경을 포함한 Docker 이미지를 생성합니다.
 docker build --platform linux/arm64 -t raspberry-pi-camera-stream .
 ```
 
-#### 3. 프로젝트 컴파일
+#### 3. 개발 워크플로우: 프로젝트 컴파일
 
-다음 명령어를 실행하여 Docker 컨테이너 내부에서 프로젝트를 컴파일합니다. `-v "$(pwd)/target:/app/target"` 부분은 로컬 PC의 `target` 폴더를 컨테이너의 `target` 폴더와 연결하여, 빌드 결과물이 로컬 PC에 저장되도록 합니다.
+로컬 PC에서 소스 코드를 수정한 후, 아래 명령어만 실행하면 Docker 컨테이너 내부에서 프로젝트가 컴파일됩니다. `-v "$(pwd):/app"` 옵션은 현재 프로젝트 디렉토리를 컨테이너의 `/app` 디렉토리와 실시간으로 동기화합니다.
 
 ```bash
 # Docker 컨테이너를 실행하여 프로젝트를 빌드합니다.
-docker run --rm -v "$(pwd)/target:/app/target" --platform linux/arm64 raspberry-pi-camera-stream
+docker run --rm -v "$(pwd):/app" -w /app --platform linux/arm64 raspberry-pi-camera-stream
 ```
-> **참고**: 이 과정은 PC에서 ARM64 아키텍처를 에뮬레이션하며 컴파일하므로, PC 사양에 따라 수십 분 이상 소요될 수 있습니다.
+> **참고**: 최초 컴파일은 모든 의존성을 다운로드하므로 시간이 걸리지만, 이후부터는 변경된 코드만 컴파일하므로 훨씬 빠르게 완료됩니다.
 
 #### 4. 실행 파일 배포
 
-컴파일이 성공적으로 완료되면, 로컬 PC의 `target/aarch64-unknown-linux-gnu/release/` 디렉토리에서 `raspberry_pi_camera_stream` 실행 파일을 찾을 수 있습니다.
+컴파일이 성공적으로 완료되면, target/release/ `raspberry_pi_camera_stream` 실행 파일을 찾을 수 있습니다.
 
 ```bash
 # scp를 이용해 컴파일된 바이너리를 라즈베리 파이로 전송
-scp target/aarch64-unknown-linux-gnu/release/raspberry_pi_camera_stream pi@<라즈베리파이_IP>:~
+scp target/release/raspberry_pi_camera_stream pi@<라즈베리파이_IP>:~
 
 # 라즈베리 파이에 SSH로 접속하여 실행 권한을 부여하고 실행
 ssh pi@<라즈베리파이_IP>

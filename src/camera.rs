@@ -1,7 +1,7 @@
 use anyhow::{Result, anyhow};
 use opencv::{
     prelude::*,
-    videoio::{VideoCapture, CAP_ANY, CAP_PROP_FRAME_WIDTH, CAP_PROP_FRAME_HEIGHT},
+    videoio::{VideoCapture, CAP_PROP_FRAME_WIDTH, CAP_PROP_FRAME_HEIGHT, CAP_V4L2},
     imgcodecs::{imencode, IMWRITE_JPEG_QUALITY},
     core::Vector,
 };
@@ -18,7 +18,7 @@ impl Camera {
     pub fn new(device_id: i32, width: i32, height: i32, fps: u64) -> Result<Self> {
         info!("Initializing camera with device ID: {}", device_id);
         
-        let mut cap = VideoCapture::new(device_id, CAP_ANY)?;
+        let mut cap = VideoCapture::new(device_id, CAP_V4L2)?;
         
         if !cap.is_opened()? {
             return Err(anyhow!("Unable to open camera device {}", device_id));

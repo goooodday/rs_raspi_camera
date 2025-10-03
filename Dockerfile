@@ -24,7 +24,7 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 WORKDIR /app
 
 # Copy the project files
-COPY . .
+
 
 # Build the project
 # We don't need the rpi4 alias anymore because we are not cross-compiling
